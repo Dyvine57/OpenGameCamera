@@ -62,6 +62,7 @@
                 </Button.Content>
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
+                        <Setter Property="Cursor" Value="Hand"/>
                         <Setter Property="Background" Value="#00000000"/>
                         <Setter Property="Foreground" Value="#FFF1F1F1"/>
                         <Style.Triggers>
@@ -95,6 +96,7 @@
                         <Button x:Name="CopyTextButton" Content="Copy Log Output" Height="25" Margin="0" FontSize="12" BorderBrush="Black" Width="110" HorizontalAlignment="Right" Click="CopyTextButton_Click" FontWeight="Bold">
                             <Button.Style>
                                 <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Cursor" Value="Hand"/>
                                     <Setter Property="Background" Value="Transparent"/>
                                     <Setter Property="BorderBrush" Value="#FFF1F1F1"/>
                                     <Setter Property="Foreground" Value="#FFF1F1F1"/>
@@ -121,6 +123,7 @@
                 <Button x:Name="InjectButton" Margin="5,2,5,0" Height="60" FontSize="16" BorderBrush="Black" Foreground="#FFFFFF"  Click="InjectButton_Click" FontWeight="Bold">
                     <Button.Style>
                         <Style TargetType="{x:Type Button}">
+                            <Setter Property="Cursor" Value="Hand"/>
                             <Setter Property="Background" Value="#fc0603"/>
                             <Setter Property="BorderBrush" Value="Black"/>
                             <Setter Property="Foreground" Value="#FFFFFF"/>
