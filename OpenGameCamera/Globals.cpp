@@ -78,27 +78,27 @@ time_t Globals::lastTime = clock();
 Vec4 Globals::g_CameraPosition = { 0, 0, 0, 0 };
 
 // key definitions for our preset keys
-KeyDef Keys::showMenuKey = { "HOME", VK_HOME };
+KeyDef Keys::showMenuKey = { "F6", VK_F6 };
 KeyDef Keys::enableFreeCam = { "F5", VK_F5 };
 KeyDef Keys::freezePlayer = { "F6", VK_F6 };
 KeyDef Keys::speedUpCamera = { "SHIFT", VK_SHIFT };
 KeyDef Keys::slowDownCamera = { "ALT", VK_MENU };
-KeyDef Keys::cameraForward = { "W", 0x57 };
-KeyDef Keys::cameraBack = { "S", 0x53 };
-KeyDef Keys::cameraLeft = { "A", 0x41 };
-KeyDef Keys::cameraRight = { "D", 0x44 };
+KeyDef Keys::cameraForward = { "W", VK_UP };
+KeyDef Keys::cameraBack = { "S", VK_DOWN };
+KeyDef Keys::cameraLeft = { "A", VK_LEFT };
+KeyDef Keys::cameraRight = { "D", VK_RIGHT };
 KeyDef Keys::cameraUp = { "SPACE", VK_SPACE };
 KeyDef Keys::cameraDown = { "CONTROL", VK_CONTROL };
 KeyDef Keys::disableUi = { "F7", VK_F7 };
 KeyDef Keys::freezeTime = { "F8", VK_F8 };
 KeyDef Keys::fovIncrease = { "+", VK_OEM_PLUS };
 KeyDef Keys::fovDecrease = { "-", VK_OEM_MINUS };
-KeyDef Keys::enableResScale = { "INSERT", VK_INSERT };
+KeyDef Keys::enableResScale = { "F10", VK_F10 };
 KeyDef Keys::enableDof = { "F9", VK_F9 };
 KeyDef Keys::resetSettingsMenus = { "" };
 
 bool Settings::updateMouseState = false;
-bool Settings::informationMenu = true;
+bool Settings::informationMenu = false;
 bool Settings::enableFreeCam = false;
 bool Settings::disableUi = true;
 bool Settings::homeMenu = false;

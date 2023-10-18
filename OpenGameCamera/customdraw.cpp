@@ -44,14 +44,5 @@ void CustomDraw::Draw()
 	ImVec2 window_pos_pivot = ImVec2((CORNER & 1) ? 1.0f : 0.0f, (CORNER & 2) ? 1.0f : 0.0f);
 	ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 
-	if (Settings::informationMenu) {
-		ImGui::Begin("Information", reinterpret_cast<bool*>(true), WINDOW_FLAGS);
-		{
-			hkCallback();
-			ImGui::End();
-		}
-	}
-	else {
-		hkCallback();
-	}
+	hkCallback();
 }

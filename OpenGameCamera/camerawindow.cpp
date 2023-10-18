@@ -29,10 +29,5 @@ void CameraWindow::Draw()
 	ImGui::SliderFloat("Time scale", &Settings::timeScale, 0.1, 1.f, "%.3f", 1.0F);
 	ImGui::Checkbox("Force Exposure", &Settings::forceEv);
 	ImGui::SliderFloat("Exposure Value", &Settings::evControl, 0, 18, "%.3f", 1.0F);
-	ImGui::Checkbox("SSR Enable", &Settings::ssrEnable);
-	ImGui::Checkbox("SSR Full Res Enable", &Settings::ssrFullResEnable);
-	ImGui::Checkbox(std::string("Enable Resolution Scale [" + Keys::enableResScale.name + "]").c_str(), &Settings::enableResScale);
-	ImGui::InputFloat("Resolution Scale", &Settings::resScale, 1.f, 0.25f, "%.3f", 1.0F);
-	Settings::resScale = std::min(5.f, std::max(0.25f, Settings::resScale));
 	ImGui::End();
 }

@@ -65,21 +65,6 @@ void drawLoop() {
 		g_origSSRValueSet = true;
 	}
 
-	if (Settings::informationMenu && Globals::g_CameraPosition.x != NULL) {
-		ImGui::Text("Information Menu");
-		ImGui::Text("Camera XYZ: %f / %f / %f", Globals::g_CameraPosition.x, Globals::g_CameraPosition.y, Globals::g_CameraPosition.z);
-	}
-
-	// if the mouse hook hasn't been activated yet, display a help message
-	if (Settings::informationMenu && MouseManager::arg1 == NULL) {
-		ImGui::Text("Pause the game to initialize mouse hook");
-	}
-
-	// if the freecam is active and so is the menu, display this help message
-	if (Settings::informationMenu && Settings::homeMenu) {
-		ImGui::Text("Hide the menu to move the camera");
-	}
-
 	if (Settings::updateMouseState) {
 		MouseManager::SetMouseState(Settings::homeMenu);
 		Settings::updateMouseState = false;
@@ -98,55 +83,10 @@ void drawLoop() {
 		GameRenderer::GetInstance()->gameRenderSettings->resolutionScale = 1.f;
 	}
 
-	// Set our FOV
-	if (Settings::enableFreeCam) {
-		float amount = .25f;
-		if (Globals::ReadKey(Keys::speedUpCamera)) amount = 1.f;
-		if (Globals::ReadKey(Keys::slowDownCamera)) amount = .05f;
-		if (Globals::ReadKeyOnce(Keys::fovIncrease, 25)) {
-			Settings::fov += amount;
-		}
-		if (Globals::ReadKeyOnce(Keys::fovDecrease, 25)) {
-			Settings::fov -= amount;
-		}
-		GameRenderer::GetInstance()->gameRenderSettings->forceFov = Settings::fov;
-	}
-	else {
-		GameRenderer::GetInstance()->gameRenderSettings->forceFov = -1;
-	}
-
-	// freeze time hotkey toggle
-	if (Globals::ReadKeyOnce(Keys::freezeTime)) {
-		Settings::freezeTime = !Settings::freezeTime;
-	}
-
-	// read enableFreeCam hotkey
-	if (Globals::ReadKeyOnce(Keys::enableFreeCam)) {
-		Settings::enableFreeCam = !Settings::enableFreeCam;
-	}
-	// read freezePlayer hotkey
-	if (Globals::ReadKeyOnce(Keys::freezePlayer)) {
-		Settings::freezePlayer = !Settings::freezePlayer;
-	}
-
-	// read disableUi hotkey
-	if (Globals::ReadKeyOnce(Keys::disableUi)) {
-		Settings::disableUi = !Settings::disableUi;
-	}
 
 	// read DoF hotkey
 	if (Globals::ReadKeyOnce(Keys::enableDof)) {
 		Settings::enableDof = !Settings::enableDof;
-	}
-
-	// SSR toggle
-	if (g_PostProcess != nullptr) {
-		g_PostProcess->screenSpaceRaytraceEnable = Settings::ssrEnable;
-		g_PostProcess->screenSpaceRaytraceFullresEnable = Settings::ssrFullResEnable;
-	}
-	else if (g_PostProcess != nullptr) {
-		g_PostProcess->screenSpaceRaytraceEnable = g_origSSREnable;
-		g_PostProcess->screenSpaceRaytraceFullresEnable = g_origSSRFullResEnable;
 	}
 	
 	// DoF toggle
@@ -164,98 +104,6 @@ void drawLoop() {
 	}
 	else if (g_PostProcess != nullptr) {
 		g_PostProcess->spriteDofEnable = false;
-	}
-
-
-	// (dcat): testing bloom controls
-	if (Settings::forceBloomEnable && g_PostProcess != nullptr) {
-		g_PostProcess->bloomEnable = Settings::forceBloomEnable;
-	}
-	else if (g_PostProcess != nullptr) {
-		g_PostProcess->bloomEnable = false;
-	}
-
-	// Exposure control 
-	if (Settings::forceEv) {
-		if (g_PostProcess != nullptr) {
-			g_PostProcess->forceEVEnable = true;
-			std::cout << std::hex << &g_PostProcess->forceEVEnable << std::endl;
-		}
-	}
-	// Exposure
-	if (Settings::evControl && g_PostProcess != nullptr) {
-		g_PostProcess->forceEV = Settings::evControl;
-	}
-
-	// Extra Post Process
-	if (g_PostProcess != nullptr) {
-		g_PostProcess->VignetteEnable = Settings::VignetteEnable;
-		g_PostProcess->ColorGradingEnable = Settings::enableGrading;
-		g_PostProcess->FilmGrainEnable = Settings::FilmGrainEnable;
-		g_PostProcess->ChromaticAberrationAllowed = Settings::ChromaticAberrationAllowed;
-		g_PostProcess->LensDistortionAllowed = Settings::LensDistortionAllowed;
-		
-	}
-
-	// Should the time be frozen?
-	GameTimeSettings::GetInstance()->timeScale = Settings::freezeTime ? 0.f : Settings::timeScale;
-
-	// only process this stuff if the FreeCam is enabled
-	if (Settings::enableFreeCam) {
-		// disable the UI
-		if (Settings::disableUi) UISettings::GetInstance()->drawEnable = false;
-
-		// Get the GameRenderer pointer
-		GameRenderer* pGameRenderer = GameRenderer::GetInstance();
-
-		InputSettings::GetInstance()->mouseSensitivityPower = Settings::mouseSensitivity;
-
-		// get the speed to move the camera at, and change it if the modifier keys are being pressed
-		float amount = Settings::mainSpeed * Settings::camSens * 0.5;
-		if (Globals::ReadKey(Keys::speedUpCamera)) amount = Settings::fastSpeed * Settings::camSens * 0.5;
-		if (Globals::ReadKey(Keys::slowDownCamera)) amount = Settings::slowSpeed * Settings::camSens * 0.5;
-
-		// set up some vectors
-		Vec4 origin = pGameRenderer->renderView->transform.o;
-		Vec4 xVec = pGameRenderer->renderView->transform.x;
-		Vec4 yVec = pGameRenderer->renderView->transform.y;
-		Vec4 zVec = pGameRenderer->renderView->transform.z;
-
-		// modify the 'origin' vector based on what keys are being pressed
-		if (Settings::lockFreeCam == false){
-			if (Globals::ReadKey(Keys::cameraForward)) { // forwards
-				origin = origin - zVec * amount;
-			}
-			if (Globals::ReadKey(Keys::cameraBack)) { // backwards
-				origin = origin + zVec * amount;
-			}
-			if (Globals::ReadKey(Keys::cameraLeft)) {	// left
-				origin = origin - xVec * amount;
-			}
-			if (Globals::ReadKey(Keys::cameraRight)) {	// right
-				origin = origin + xVec * amount;
-			}
-			if (Globals::ReadKey(Keys::cameraDown)) { // down
-				origin = origin - yVec * amount;
-			}
-			if (Globals::ReadKey(Keys::cameraUp)) { // up
-				origin = origin + yVec * amount;
-			}
-		}
-
-		// Hacky fix for renderers to let the camera know it needs to update
-		if (Globals::g_CameraPosition.w == -1) {
-			Globals::g_CameraPosition.w = 0;
-			origin = Globals::g_CameraPosition;
-		}
-		// set the global cameraPosition vec4 to our new location
-		Globals::g_CameraPosition = origin;
-	}
-	else {
-		// freecam is DISABLED
-		if (Settings::disableUi) UISettings::GetInstance()->drawEnable = true;
-
-		InputSettings::GetInstance()->mouseSensitivityPower = 1.f;
 	}
 }
 
