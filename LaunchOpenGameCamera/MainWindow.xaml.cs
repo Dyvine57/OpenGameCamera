@@ -258,7 +258,7 @@ namespace LaunchOpenGameCamera
         }
 
         BitmapImage defaultBG = new BitmapImage(new Uri("https://i.imgur.com/yq2teqq.png"));
-        BitmapImage cody = new BitmapImage(new Uri("https://i.imgur.com/4gb8BpI.png"));
+        BitmapImage cody = new BitmapImage(new Uri("https://i.imgur.com/Fd0claF.png co"));
         BitmapImage owlhous = new BitmapImage(new Uri("https://i.imgur.com/Db6N5Xa.png"));
         BitmapImage victo = new BitmapImage(new Uri("https://i.imgur.com/uhqUJ8d.png"));
 
