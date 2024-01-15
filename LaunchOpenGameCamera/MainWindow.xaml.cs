@@ -173,7 +173,7 @@ namespace LaunchOpenGameCamera
 
         public static Nullable<DateTime> GetBuildUTCTimestamp(ConsoleContent console)
         {
-            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("OpenGameCamera.BuildTimestamp.txt"))
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("WateredDownCamera.BuildTimestamp.txt"))
             {
                 if (stream == null)
                 {
@@ -300,10 +300,10 @@ namespace LaunchOpenGameCamera
                 }
             }
 
-            string dllPath = Path.Combine(rootDir, "OpenGameCamera.dll");
+            string dllPath = Path.Combine(rootDir, "WateredDownCamera.dll");
             if (!File.Exists(dllPath))
             {
-                if (!ResourceExtractor.ExtractResourceToFile(console, "OpenGameCamera.OpenGameCamera.dll", dllPath))
+                if (!ResourceExtractor.ExtractResourceToFile(console, "WateredDownCamera.OpenGameCamera.dll", dllPath))
                 {
                     console.Error("Failed to extract WDC DLL");
                     return;
@@ -314,7 +314,7 @@ namespace LaunchOpenGameCamera
 
             string dllCTPath = Path.Combine(rootDir, "CT_SWBF2.patched.dll");
             if (!File.Exists(dllCTPath)) {
-                if (!ResourceExtractor.ExtractResourceToFile(console, "OpenGameCamera.CT_SWBF2.patched.dll", dllCTPath)) {
+                if (!ResourceExtractor.ExtractResourceToFile(console, "WateredDownCamera.CT_SWBF2.patched.dll", dllCTPath)) {
                     console.Error("Failed to extract CT DLL");
                     return;
                 }
