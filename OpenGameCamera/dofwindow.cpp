@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "dofwindow.h"
 #include <Windows.h>
 
@@ -8,7 +9,7 @@ DofWindow::DofWindow()
 
 bool DofWindow::IsEnabled()
 {
-	return Settings::homeMenu && Settings::dofMenu;
+	return Settings::homeMenu;
 }
 
 void DofWindow::SetEnabled(bool enabled)
@@ -18,7 +19,7 @@ void DofWindow::SetEnabled(bool enabled)
 
 void DofWindow::Draw()
 {
-	ImGui::Begin("Depth of Field", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("WateredDownCamera", NULL, ImGuiWindowFlags_AlwaysAutoResize);
 	ImGui::Checkbox(std::string("Enable Depth of Field [" + Keys::enableDof.name + "]").c_str(), &Settings::enableDof);
 	ImGui::Checkbox("Enable Foreground Blur", &Settings::dofEnableForeground);
 	ImGui::Checkbox("Blur Half Resolution", &Settings::spriteHalfResolution);
@@ -28,5 +29,8 @@ void DofWindow::Draw()
 	ImGui::SliderFloat("Focus Distance", &Settings::focusDistance, 0, 128, "%.3f", 1.0F);
 	ImGui::SliderFloat("Far Start", &Settings::dofFarStart, 0, 32, "%.3f", 1.0F);
 	ImGui::SliderFloat("Far End", &Settings::dofFarEnd, 0, 32, "%.3f", 1.0F);
+	ImGui::Checkbox(std::string("Enable Resolution Scale [" + Keys::enableResScale.name + "]").c_str(), &Settings::enableResScale);
+	ImGui::InputFloat("Resolution Scale", &Settings::resScale, 1.f, 0.25f, "%.3f", 1.0F);
+	Settings::resScale = std::min(5.f, std::max(0.25f, Settings::resScale));
 	ImGui::End();
 }

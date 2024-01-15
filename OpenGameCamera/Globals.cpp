@@ -77,8 +77,12 @@ time_t Globals::lastTime = clock();
 
 Vec4 Globals::g_CameraPosition = { 0, 0, 0, 0 };
 
-// key definitions for our preset keys
+// actual key definitions for our preset keys
 KeyDef Keys::showMenuKey = { "F6", VK_F6 };
+KeyDef Keys::enableDof = { "F9", VK_F9 };
+KeyDef Keys::enableResScale = { "F10", VK_F10 };
+
+// old stuff
 KeyDef Keys::enableFreeCam = { "F5", VK_F5 };
 KeyDef Keys::freezePlayer = { "F6", VK_F6 };
 KeyDef Keys::speedUpCamera = { "SHIFT", VK_SHIFT };
@@ -93,8 +97,6 @@ KeyDef Keys::disableUi = { "F7", VK_F7 };
 KeyDef Keys::freezeTime = { "F8", VK_F8 };
 KeyDef Keys::fovIncrease = { "+", VK_OEM_PLUS };
 KeyDef Keys::fovDecrease = { "-", VK_OEM_MINUS };
-KeyDef Keys::enableResScale = { "F10", VK_F10 };
-KeyDef Keys::enableDof = { "F9", VK_F9 };
 KeyDef Keys::resetSettingsMenus = { "" };
 
 bool Settings::updateMouseState = false;
@@ -132,8 +134,8 @@ float Settings::dofBlurMax = 3.f;
 float Settings::dofFarStart = 4.f;
 float Settings::dofFarEnd = 16.f;
 bool Settings::dofEnableForeground = false;
-float Settings::dofNearStart = 1.f;
-float Settings::dofNearEnd = 2.f;
+float Settings::dofNearStart = 2.f;
+float Settings::dofNearEnd = 8.f;
 // Post Proccess Settings
 bool Settings::enablePost = false;
 bool Settings::forceBloomEnable = true;

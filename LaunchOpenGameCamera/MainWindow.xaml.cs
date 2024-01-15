@@ -6,7 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -254,7 +254,7 @@ namespace LaunchOpenGameCamera
                 buildVersion = buildDate.Value.ToString("yyyy.MM.dd-HHmmss");
             }
 
-            console.Info("Welcome to WateredDownCamera. To begin, ensure your game is running before starting.\n\n");
+            console.Info("Welcome to WateredDownCamera. To begin, ensure your game is running before starting.\n");
         }
 
         BitmapImage defaultBG = new BitmapImage(new Uri("https://i.imgur.com/yq2teqq.png"));
@@ -278,7 +278,7 @@ namespace LaunchOpenGameCamera
                 BackgroundImage.ImageSource = defaultBG;
         }
 
-        private void InjectButton_Click(object sender, RoutedEventArgs e)
+        private async void InjectButton_Click(object sender, RoutedEventArgs e)
         {
             string rootDir = Path.Combine(Path.GetTempPath(), "WateredDownCamera", buildVersion ?? "default");
 
@@ -327,23 +327,14 @@ namespace LaunchOpenGameCamera
                 return;
             }
             else {
-                Thread.Sleep(2000);
+                await Task.Delay(3000);
                 if (!DllInjector.Inject(console, dllPath, "WDC")) {
                     console.Error("Failed to inject WDC");
                     return;
                 }
             }
 
-            console.Info("");
-        }
-
-        private void CopyTextButton_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetDataObject(console.GetText());
-        }
-
-        private void Web_Button_Click(object sender, RoutedEventArgs e) {
-            Process.Start("https://github.com/coltonon/OpenGameCamera");
+            console.Line();
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -375,6 +366,10 @@ namespace LaunchOpenGameCamera
         public void SetScrollViewer(ScrollViewer view)
         {
             scroller = view;
+        }
+
+        public void Line() {
+            ConsoleOutput.Add("");
         }
 
         public void Info(string msg)

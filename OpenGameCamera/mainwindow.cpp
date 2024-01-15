@@ -14,7 +14,7 @@ MainWindow::MainWindow()
 	}
 	gpMainWindow = this;
 	new DofWindow();
-	new PostWindow();
+	//new PostWindow();
 }
 
 bool MainWindow::IsEnabled()
@@ -30,11 +30,13 @@ void MainWindow::SetEnabled(bool enabled)
 void MainWindow::Draw()
 {
 	//ImGui::BeginMainMenuBar();
-	ImGui::Begin("OpenGameCamera", NULL, ImGuiWindowFlags_AlwaysAutoResize);
+	/*
+	ImGui::Begin("WateredDownCamera", NULL, ImGuiWindowFlags_AlwaysAutoResize);
 	if (ImGui::Checkbox(std::string("Show Menu [" + Keys::showMenuKey.name + "]").c_str(), &Settings::homeMenu)) {
 		Settings::updateMouseState = true;
 	}
 	ImGui::Checkbox("Show DoF Menu", &Settings::dofMenu);
 	ImGui::Checkbox("Show Post Process Menu", &Settings::postMenu);
 	ImGui::End();
+	*/
 }
