@@ -258,24 +258,24 @@ namespace LaunchOpenGameCamera
         }
 
         BitmapImage defaultBG = new BitmapImage(new Uri("https://i.imgur.com/yq2teqq.png"));
-        BitmapImage cody = new BitmapImage(new Uri("https://i.imgur.com/Fd0claF.png co"));
+        BitmapImage cody = new BitmapImage(new Uri("https://i.imgur.com/Fd0claF.png"));
+        BitmapImage chewy = new BitmapImage(new Uri("https://i.imgur.com/UDNHsn1.jpeg"));
         BitmapImage owlhous = new BitmapImage(new Uri("https://i.imgur.com/Db6N5Xa.png"));
         BitmapImage victo = new BitmapImage(new Uri("https://i.imgur.com/uhqUJ8d.png"));
 
         private void ImageRandomizer() {
             int random = new Random().Next(0, 100);
 
-            if (random < 50 && BackgroundImage.ImageSource != defaultBG)
-                BackgroundImage.ImageSource = defaultBG;
-
-            if (random < 20 && BackgroundImage.ImageSource != cody)
-                BackgroundImage.ImageSource = cody;
-
-            if (random < 6.9 && BackgroundImage.ImageSource != owlhous)
-                BackgroundImage.ImageSource = owlhous;
-            
-            if (random < 2 && BackgroundImage.ImageSource != victo)
+            if (random < 2)
                 BackgroundImage.ImageSource = victo;
+            else if (random < 6.9)
+                BackgroundImage.ImageSource = owlhous;
+            else if (random < 20)
+                BackgroundImage.ImageSource = chewy;
+            else if (random < 50)
+                BackgroundImage.ImageSource = cody;
+            else
+                BackgroundImage.ImageSource = defaultBG;
         }
 
         private void InjectButton_Click(object sender, RoutedEventArgs e)
