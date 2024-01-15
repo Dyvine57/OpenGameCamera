@@ -24,7 +24,7 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <StackPanel HorizontalAlignment="Center" Height="342" Margin="0,0,0,8" VerticalAlignment="Bottom" Width="552">
-                <ScrollViewer x:Name="Scroller" Margin="5,5,5,5" Background="#DD000000" BorderBrush="Black" Height="270" VerticalScrollBarVisibility="Hidden" Padding="5">
+                <ScrollViewer x:Name="Scroller" Margin="5,5,5,5" Background="#99000000" Height="270" VerticalScrollBarVisibility="Hidden" Padding="5">
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding ConsoleOutput, Mode=OneWay}" IsEnabled="False">
                             <ItemsControl.ItemTemplate>
