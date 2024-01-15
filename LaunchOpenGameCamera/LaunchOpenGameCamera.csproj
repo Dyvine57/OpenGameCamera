@@ -164,7 +164,9 @@
   <ItemGroup>
     <EmbeddedResource Include="OpenGameCamera.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="CT_SWBF2.patched.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>xcopy /Y $(SolutionDir)x64\$(ConfigurationName)\OpenGameCamera.dll $(ProjectDir)

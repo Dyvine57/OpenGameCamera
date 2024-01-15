@@ -22,12 +22,7 @@ namespace LaunchOpenGameCamera.Themes
         }
 
         public void CloseWind(Window window) {
-            if (window.Title == "OpenGameCamera") {
-                //Environment.Exit(0);
-                //Process.GetCurrentProcess().Kill();
-                Application.Current.Shutdown();
-            }
-            else window.Hide();
+            window.Close();
         }
 
         public void MaximizeRestore(Window window)

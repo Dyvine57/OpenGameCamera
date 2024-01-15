@@ -1,24 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace LaunchOpenGameCamera
 {
@@ -70,7 +62,7 @@ namespace LaunchOpenGameCamera
         const uint MEM_RESERVE = 0x00002000;
         const uint PAGE_READWRITE = 4;
 
-        public static bool Inject(ConsoleContent console, string dll_path)
+        public static bool Inject(ConsoleContent console, string dll_path, string injectedName)
         {
             IntPtr wnd = FindWindow(null, "STAR WARS Battlefront II");
             if (wnd == null)
@@ -79,8 +71,7 @@ namespace LaunchOpenGameCamera
                 return false;
             }
 
-            uint processId = 0;
-            GetWindowThreadProcessId(wnd, out processId);
+            GetWindowThreadProcessId(wnd, out uint processId);
 
             if (processId == 0)
             {
@@ -124,25 +115,21 @@ namespace LaunchOpenGameCamera
 
                 console.Info("memory allocated in SWBF2: 0x" + targetAddr.ToInt64().ToString("X16"));
 
-                UIntPtr bytesWritten;
 
-                if (!WriteProcessMemory(procHandle, targetAddr, pathBuf, (uint) pathBuf.Length, out bytesWritten))
-                {
+                if (!WriteProcessMemory(procHandle, targetAddr, pathBuf, (uint)pathBuf.Length, out UIntPtr bytesWritten)) {
                     console.Error("failed to write memory in target process: code=" + Marshal.GetLastWin32Error());
                     return false;
                 }
 
                 console.Info("wrote " + bytesWritten.ToUInt64() + " bytes to allocated memory");
 
-                IntPtr threadId;
 
-                if (CreateRemoteThread(procHandle, IntPtr.Zero, 0, loadLibraryPtr, targetAddr, 0, out threadId) == null)
-                {
+                if (CreateRemoteThread(procHandle, IntPtr.Zero, 0, loadLibraryPtr, targetAddr, 0, out IntPtr threadId) == null) {
                     console.Error("failed to launch remote thread: code=" + Marshal.GetLastWin32Error());
                     return false;
                 }
 
-                console.Info("OGC injected into SWBF2: threadId=" + threadId.ToInt64());
+                console.Info(injectedName + " injected into SWBF2: threadId=" + threadId.ToInt64());
             } 
             finally
             {
@@ -181,8 +168,6 @@ namespace LaunchOpenGameCamera
                     }
                 }
             }
-
-            console.Info("OpenGameCamera extracted to " + filename);
             return true;
         }
 
@@ -258,36 +243,50 @@ namespace LaunchOpenGameCamera
         {
             InitializeComponent();
 
+            ImageRandomizer();
+
             DataContext = console;
             console.SetScrollViewer(Scroller);
 
             DateTime? buildDate = ResourceExtractor.GetBuildUTCTimestamp(console);
-            if (buildDate != null)
-            {
+            if (buildDate != null) {
                 buildTimestampUTC = buildDate.Value;
                 buildVersion = buildDate.Value.ToString("yyyy.MM.dd-HHmmss");
-
-                CheckForLatestRelease();
             }
 
-            console.Info("Welcome to OpenGameCamera. To begin, ensure your game is running before starting OGC.\n\n");
-            console.Info("Share your captures and get support on official OGC Discord: https://discord.gg/HZ676Ff.\n\n");
+            console.Info("Welcome to WateredDownCamera. To begin, ensure your game is running before starting.\n\n");
         }
 
-        private void CheckForLatestRelease()
-        {
-            // TODO: For the future when I figure out how to merge references into one EXE correctly...
+        BitmapImage defaultBG = new BitmapImage(new Uri("https://i.imgur.com/yq2teqq.png"));
+        BitmapImage cody = new BitmapImage(new Uri("https://i.imgur.com/4gb8BpI.png"));
+        BitmapImage owlhous = new BitmapImage(new Uri("https://i.imgur.com/Db6N5Xa.png"));
+        BitmapImage victo = new BitmapImage(new Uri("https://i.imgur.com/uhqUJ8d.png"));
+
+        private void ImageRandomizer() {
+            int random = new Random().Next(0, 100);
+
+            if (random < 50 && BackgroundImage.ImageSource != defaultBG)
+                BackgroundImage.ImageSource = defaultBG;
+
+            if (random < 20 && BackgroundImage.ImageSource != cody)
+                BackgroundImage.ImageSource = cody;
+
+            if (random < 6.9 && BackgroundImage.ImageSource != owlhous)
+                BackgroundImage.ImageSource = owlhous;
+            
+            if (random < 2 && BackgroundImage.ImageSource != victo)
+                BackgroundImage.ImageSource = victo;
         }
 
         private void InjectButton_Click(object sender, RoutedEventArgs e)
         {
-            string rootDir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "OpenGameCamera", buildVersion ?? "default");
+            string rootDir = Path.Combine(Path.GetTempPath(), "WateredDownCamera", buildVersion ?? "default");
 
             if (!Directory.Exists(rootDir)) {
                 try
                 {
                     Directory.CreateDirectory(rootDir);
-                    console.Info("Creating directory for OGC: path=" + rootDir);
+                    console.Info("Creating directory for WDC: path=" + rootDir);
                 }
                 catch (IOException)
                 {
@@ -299,28 +298,40 @@ namespace LaunchOpenGameCamera
                     console.Error("Permission error trying to create: path=" + rootDir);
                     return;
                 }
-            } 
-            else
-            {
-                console.Info("Directory already exists at " + rootDir);
             }
 
-            string dllPath = System.IO.Path.Combine(rootDir, "OpenGameCamera.dll");
+            string dllPath = Path.Combine(rootDir, "OpenGameCamera.dll");
             if (!File.Exists(dllPath))
             {
                 if (!ResourceExtractor.ExtractResourceToFile(console, "OpenGameCamera.OpenGameCamera.dll", dllPath))
                 {
-                    console.Error("Failed to extract DLL -- if this happens consistently, paste the Log Output in #log-outputs in the OpenGameCamera Discord (https://discord.gg/HZ676Ff)");
+                    console.Error("Failed to extract WDC DLL");
                     return;
                 }
 
-                console.Info("Extracted OGC to " + dllPath);
+                console.Info("Extracted WDC to " + dllPath);
             }
 
-            if (!DllInjector.Inject(console, dllPath))
-            {
-                console.Error("Failed to inject -- if this happens consistently, paste the Log Output in #log-outputs in the OpenGameCamera Discord (https://discord.gg/HZ676Ff)");
+            string dllCTPath = Path.Combine(rootDir, "CT_SWBF2.patched.dll");
+            if (!File.Exists(dllCTPath)) {
+                if (!ResourceExtractor.ExtractResourceToFile(console, "OpenGameCamera.CT_SWBF2.patched.dll", dllCTPath)) {
+                    console.Error("Failed to extract CT DLL");
+                    return;
+                }
+
+                console.Info("Extracted CT to " + dllCTPath);
+            }
+
+            if (!DllInjector.Inject(console, dllCTPath, "CineTools")) {
+                console.Error("Failed to inject CineTools");
                 return;
+            }
+            else {
+                Thread.Sleep(2000);
+                if (!DllInjector.Inject(console, dllPath, "WDC")) {
+                    console.Error("Failed to inject WDC");
+                    return;
+                }
             }
 
             console.Info("");
@@ -333,6 +344,13 @@ namespace LaunchOpenGameCamera
 
         private void Web_Button_Click(object sender, RoutedEventArgs e) {
             Process.Start("https://github.com/coltonon/OpenGameCamera");
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e) {
+            base.OnKeyDown(e);
+
+            if (e.Key == Key.F5)
+                ImageRandomizer();
         }
     }
 
@@ -377,10 +395,7 @@ namespace LaunchOpenGameCamera
         private void Log(string prefix, string msg)
         {
             ConsoleOutput.Add("[" + prefix + "] " + msg);
-            if (scroller != null)
-            {
-                scroller.ScrollToBottom();
-            }
+            scroller?.ScrollToBottom();
         }
 
         public string GetText()
@@ -391,8 +406,7 @@ namespace LaunchOpenGameCamera
         public event PropertyChangedEventHandler PropertyChanged;
         void OnPropertyChanged(string propertyName)
         {
-            if (null != PropertyChanged)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
