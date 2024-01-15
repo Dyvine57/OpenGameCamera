@@ -23,7 +23,7 @@
                     <GradientStop Color="#69000000" Offset="0.3"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <StackPanel HorizontalAlignment="Center" Height="342" Margin="0,0,0,8" VerticalAlignment="Bottom" Width="552">
+            <StackPanel HorizontalAlignment="Center" Height="340" Margin="0,0,0,8" VerticalAlignment="Bottom" Width="552">
                 <ScrollViewer x:Name="Scroller" Margin="5,5,5,5" Background="#99000000" Height="270" VerticalScrollBarVisibility="Hidden" Padding="5">
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding ConsoleOutput, Mode=OneWay}" IsEnabled="False">
